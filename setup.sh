@@ -22,13 +22,13 @@ if ! command -v node &> /dev/null; then
     # Actualizar repositorios
     sudo apt update
     
-    # Instalar curl si no está instalado
-    if ! command -v curl &> /dev/null; then
-        sudo apt install -y curl
-    fi
+    # Instalar curl y herramientas de compilación si no están instaladas
+    echo -e "${YELLOW}Instalando dependencias del sistema...${NC}"
+    sudo apt install -y curl build-essential python3
     
-    # Instalar Node.js 18.x
-    curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+    # Instalar Node.js 22.x (Requerido por discord.js voice)
+    echo -e "${YELLOW}Configurando repositorio de Node.js 22.x...${NC}"
+    curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
     sudo apt install -y nodejs
     
     echo -e "${GREEN}✓ Node.js instalado correctamente${NC}"
