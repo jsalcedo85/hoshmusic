@@ -14,10 +14,21 @@ echo "    HOSH BOT - INSTALACIÓN"
 echo "=========================================="
 echo -e "${NC}"
 
-# Verificar si Node.js está instalado
+# Verificar si Node.js está instalado y es la versión correcta
 echo -e "${YELLOW}Verificando Node.js...${NC}"
-if ! command -v node &> /dev/null; then
-    echo -e "${RED}Node.js no está instalado. Instalando Node.js 18.x...${NC}"
+NODE_INSTALLED=false
+if command -v node &> /dev/null; then
+    NODE_VERSION=$(node -v | cut -d'v' -f2 | cut -d'.' -f1)
+    if [ "$NODE_VERSION" -ge 22 ]; then
+        NODE_INSTALLED=true
+        echo -e "${GREEN}✓ Node.js ya está instalado y es compatible: $(node -v)${NC}"
+    else
+        echo -e "${YELLOW}Node.js está instalado pero es una versión antigua ($(node -v)). Se requiere v22+.${NC}"
+    fi
+fi
+
+if [ "$NODE_INSTALLED" = false ]; then
+    echo -e "${RED}Instalando/Actualizando a Node.js 22.x...${NC}"
     
     # Actualizar repositorios
     sudo apt update
@@ -32,9 +43,6 @@ if ! command -v node &> /dev/null; then
     sudo apt install -y nodejs
     
     echo -e "${GREEN}✓ Node.js instalado correctamente${NC}"
-else
-    NODE_VERSION=$(node -v)
-    echo -e "${GREEN}✓ Node.js ya está instalado: ${NODE_VERSION}${NC}"
 fi
 
 # Verificar npm
